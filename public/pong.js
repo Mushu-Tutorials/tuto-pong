@@ -7,7 +7,7 @@ class Vec {
 
 class Rect {
   constructor(width, height) {
-    this.pos = new Vec;
+    this.pos = new Vec();
     this.size = new Vec(width, height);
   }
 }
@@ -15,15 +15,15 @@ class Rect {
 class Ball extends Rect {
   constructor() {
     super(10, 10);
-    this.vel = new Vec;
+    this.vel = new Vec();
   }
 }
 
-const canvas = document.getElementById('pong');
-const context = canvas.getContext('2d');
+const canvas = document.getElementById("pong");
+const context = canvas.getContext("2d");
 // console.log(context);
 
-const ball = new Ball;
+const ball = new Ball();
 console.log(ball);
 ball.pos.x = 100;
 ball.pos.y = 50;
@@ -34,24 +34,44 @@ let lastTime;
 
 function callBack(millis) {
   if (lastTime) {
-    // / 1000 -> Conversion des millisecondes en secondes
+    // (x / 1000) -> Conversion des millisecondes en secondes
     update((millis - lastTime) / 1000);
   }
   lastTime = millis;
   requestAnimationFrame(callBack);
 }
 
-// Animate the Ball
+/**
+ * Animate the Ball
+ */
 function update(deltaTime) {
   ball.pos.x += ball.vel.x * deltaTime;
   ball.pos.y += ball.vel.y * deltaTime;
 
-  // Background
-  context.fillStyle = '#000';
+  /**
+   * Detect walls of canvas and bounce ball on it
+   * Revert velocity to bounce on wall
+   * When bouncing on the wall, we retire the size of the ball to not pass throw the wall
+   */
+  if (ball.pos.x < 0 || ball.pos.x > canvas.width - ball.size.x) {
+    // Velocity of the ball minus his size to connect on the wall
+    ball.vel.x = -ball.vel.x - ball.size.x;
+  }
+  if (ball.pos.y < 0 || ball.pos.y > canvas.height - ball.size.y) {
+    // Velocity of the ball minus his size to connect on the wall
+    ball.vel.y = -ball.vel.y - ball.size.y;
+  }
+
+  /**
+   * Background of canvas
+   */
+  context.fillStyle = "#000";
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Ball
-  context.fillStyle = '#fff';
+  /**
+   * Define the ball view
+   */
+  context.fillStyle = "#fff";
   context.fillRect(ball.pos.x, ball.pos.y, ball.size.x, ball.size.y);
 }
 
