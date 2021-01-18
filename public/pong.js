@@ -10,6 +10,22 @@ class Rect {
     this.pos = new Vec();
     this.size = new Vec(width, height);
   }
+
+  get left() {
+    return this.pos.x - this.size.x / 2;
+  }
+
+  get right() {
+    return this.pos.x + this.size.x / 2;
+  }
+
+  get top() {
+    return this.pos.y - this.size.y / 2;
+  }
+
+  get bottom() {
+    return this.pos.y + this.size.y / 2;
+  }
 }
 
 class Ball extends Rect {
@@ -53,10 +69,12 @@ function update(deltaTime) {
    * Revert velocity to bounce on wall
    * When bouncing on the wall, we retire the size of the ball to not pass throw the wall
    */
+  // if (ball.pos.x < 0 || ball.pos.x > canvas.width - ball.size.x) {
   if (ball.pos.x < 0 || ball.pos.x > canvas.width - ball.size.x) {
     // Velocity of the ball minus his size to connect on the wall
     ball.vel.x = -ball.vel.x - ball.size.x;
   }
+  // if (ball.pos.y < 0 || ball.pos.y > canvas.height - ball.size.y) {
   if (ball.pos.y < 0 || ball.pos.y > canvas.height - ball.size.y) {
     // Velocity of the ball minus his size to connect on the wall
     ball.vel.y = -ball.vel.y - ball.size.y;
